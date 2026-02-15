@@ -2,21 +2,8 @@
 Generative AI models often produce "hallucinations"—factual errors presented with high confidence—and fake citations. This undermines trust in AI-generated content for research, journalism, and decision-making. **TrustGuard AI** serves as a "Truth Layer" that automatically extracts factual claims from any text, cross-references them with real-time web search data, and provides a visual trust score to help users distinguish between fact and fiction.
 
 # 2. Project Name
-TrustGuard AI (AI Trust Beacon)
-
-# 3. Team Name
-NightShift-Devs
-
-# 4. Deployed Link (optional)
-- **Frontend**: https://trustguard-ai-safety.vercel.app/
-- **Backend API**: [https://trustguard-backend-5x5q.onrender.com](https://trustguard-backend-5x5q.onrender.com)
-- **Repository**: [https://github.com/Shreyashburde05/GFGBQ-Team-NightShift-Devs](https://github.com/Shreyashburde05/GFGBQ-Team-NightShift-Devs)
-
-# 5. PPT Link
-[https://docs.google.com/presentation/d/1YJ4fISFQleYsSJWTPzwEKuOM0V34qpYM/edit?usp=sharing&ouid=111070728364722151974&rtpof=true&sd=true]
-
+TrustGuard AI 
 ---
-
 ## 🚀 Project Overview
 TrustGuard AI is a comprehensive AI safety tool consisting of a **FastAPI Backend**, a **React Web Dashboard**, and a **Chrome Extension**. It allows users to highlight any text on the web and instantly verify its accuracy. The system uses Google Gemini 3 Flash (Preview) for claim extraction and verification, combined with DuckDuckGo for real-time fact-checking.
 
@@ -41,6 +28,16 @@ TrustGuard AI is a comprehensive AI safety tool consisting of a **FastAPI Backen
 
 ---
 
+## 🔑 Supported Models
+
+| Model | Provider | Speed | Quality | Free Tier |
+|-------|----------|-------|---------|-----------|
+| **Claude Sonnet 4** | Anthropic | Fast | Excellent | No (Paid) |
+| **Gemini 1.5 Flash** | Google | Very Fast | Good | Yes |
+| **Llama 3.3 70B** | Groq | Ultra Fast | Good | Yes |
+| **Mistral 7B** | OpenRouter | Fast | Decent | Yes |
+
+---
 ## 📦 Setup and Installation
 
 ### 1. Backend Setup
@@ -51,12 +48,11 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 # Create a .env file in the backend folder:
-# GEMINI_API_KEYS=key1,key2,key3
 # GROQ_API_KEY=your_groq_key
 # TAVILY_API_KEY=your_tavily_key
 # Run the server:
-python -m uvicorn main:app --port 8000 --reload
 ```
+npm run dev
 
 ### 2. Frontend Setup
 ```bash
@@ -85,25 +81,17 @@ npm run dev
 
 ---
 
-## 🌐 Deployment Guide
+## 📈 Performance Tips
 
-### Backend (Render)
-- **Runtime**: Python 3
-- **Root Directory**: `backend`
-- **Build Command**: `pip install -r requirements.txt`
-- **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-- **Env Vars**: `GEMINI_API_KEYS`, `GROQ_API_KEY`.
+1. **Use faster models for simple tasks**: Gemini or Groq
+2. **Use Claude for complex verification**: Best accuracy
+3. **Enable multiple API keys**: Ensures availability
+4. **Monitor API usage**: Stay within rate limits
 
-### Frontend (Vercel)
-- **Framework**: Vite
-- **Env Var**: `VITE_API_URL` (Point to your Render URL + `/api/verify`).
+## 🤝 Contributing
 
----
+Feel free to add more models or improve the fallback logic!
 
-## 👥 Team - NightShift-Devs
-- **Abhinav Vaidya** - [GitHub](https://github.com/abhi9vaidya)
-- **Shreyash Burde** - [GitHub](https://github.com/Shreyashburde05)
-- **Meet Yemde** - [GitHub](https://github.com/meetyemde43)
+## 📄 License
 
----
-*Built for the GFG ByteQuest Hackathon 2025.*
+MIT License - Use freely!
