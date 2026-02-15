@@ -1,0 +1,59 @@
+{
+  "manifest_version": 3,
+  "name": "TrustGuard AI",
+  "version": "1.0",
+  "description": "Verify AI-generated text and detect hallucinations.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "contextMenus"
+  ],
+<<<<<<< HEAD
+  "host_permissions": [
+    "http://localhost:8000/*",
+    "https://trustguard-backend-5x5q.onrender.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "logo.png"
+  },
+  "icons": {
+    "16": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "logo.png"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+=======
+  "action": {
+    "default_popup": "popup.html"
+  },
+>>>>>>> 9233c0b2173e78e87f4038743812522fb3b03b15
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+<<<<<<< HEAD
+      "css": [
+        "styles.css"
+      ],
+=======
+>>>>>>> 9233c0b2173e78e87f4038743812522fb3b03b15
+      "js": [
+        "content.js"
+      ]
+    }
+  ]
+}
