@@ -1,9 +1,6 @@
-# 1. Problem Statement
+# Problem Statement
 Generative AI models often produce "hallucinations"—factual errors presented with high confidence—and fake citations. This undermines trust in AI-generated content for research, journalism, and decision-making. **TrustGuard AI** serves as a "Truth Layer" that automatically extracts factual claims from any text, cross-references them with real-time web search data, and provides a visual trust score to help users distinguish between fact and fiction.
 
-# 2. Project Name
-TrustGuard AI 
----
 ## 🚀 Project Overview
 TrustGuard AI is a comprehensive AI safety tool consisting of a **FastAPI Backend**, a **React Web Dashboard**, and a **Chrome Extension**. It allows users to highlight any text on the web and instantly verify its accuracy. The system uses Google Gemini 3 Flash (Preview) for claim extraction and verification, combined with DuckDuckGo for real-time fact-checking.
 
@@ -94,4 +91,4 @@ Feel free to add more models or improve the fallback logic!
 
 ## 📄 License
 
-MIT License - Use freely!
+MIT License 
