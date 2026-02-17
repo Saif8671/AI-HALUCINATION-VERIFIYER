@@ -3,8 +3,11 @@ Generative AI models often produce "hallucinations"—factual errors presented w
 
 ## 🚀 Project Overview
 TrustGuard AI is a comprehensive AI safety tool consisting of a **FastAPI Backend**, a **React Web Dashboard**, and a **Chrome Extension**. It allows users to highlight any text on the web and instantly verify its accuracy. The system uses Google Gemini 3 Flash (Preview) for claim extraction and verification, combined with DuckDuckGo for real-time fact-checking.
+### ppt :[TrustGuard-AI.pptx](https://github.com/user-attachments/files/25353265/TrustGuard-AI.pptx)
+
 
 ### ✨ Key Features:
+
 - **Real-time Fact Checking:** Cross-references claims with live search results using AI-generated search queries.
 - **Visual Trust Score:** Provides an overall percentage score (Verified=100%, Uncertain=50%, Hallucinated=0%) with a dynamic gauge.
 - **API Key Rotation & Cooldown:** Automatically switches between multiple Gemini API keys with a 60s cooldown to bypass free-tier rate limits.
