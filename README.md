@@ -1,24 +1,31 @@
-# TrustGuard AI 🛡️
-
-**TrustGuard AI** is a comprehensive verification tool and "Truth Layer" designed to detect AI hallucinations, factual errors, and fake citations. By automatically extracting factual claims from any text and cross-referencing them against real-time data, TrustGuard AI helps users confidently distinguish between fact and fiction.
+# 1. Problem Statement
+Generative AI models often produce "hallucinations"—factual errors presented with high confidence—and fake citations. This undermines trust in AI-generated content for research, journalism, and decision-making. **TrustGuard AI** serves as a "Truth Layer" that automatically extracts factual claims from any text, cross-references them with real-time web search data, and provides a visual trust score to help users distinguish between fact and fiction.
 
 ## 🚀 Project Overview
+TrustGuard AI is a comprehensive AI safety tool consisting of a **FastAPI Backend**, a **React Web Dashboard**, and a **Chrome Extension**. It allows users to highlight any text on the web and instantly verify its accuracy. The system uses Google Gemini 3 Flash (Preview) for claim extraction and verification, combined with DuckDuckGo for real-time fact-checking.
 
-TrustGuard AI provides users with multiple ways to verify content, including a modern Web Dashboard and a convenient Chrome Extension. It leverages multiple LLMs to ensure high availability and accuracy for real-time fact-checking.
-
-**Key Features:**
-- **Real-time Fact Checking:** Automatically generates search queries and cross-references claims with live data.
-- **Visual Trust Score:** Get instant feedback via a percentage-based gauge (Verified, Uncertain, or Hallucinated).
-- **Multi-Model Fallback System:** Built-in support and automatic fallback across top-tier models (Claude, Gemini, Groq, OpenRouter) to ensure zero downtime and bypass rate limits.
-- **Citation Verification:** Confirms whether cited sources exist and provides direct links to the evidence.
-- **Multilingual Support:** Automatically detects the input language and provides verification results in that same localized language.
-- **Modern UI/UX:** Responsive design featuring dark/light modes powered by Shadcn UI and Tailwind CSS.
+### ✨ Key Features:
+- **Real-time Fact Checking:** Cross-references claims with live search results using AI-generated search queries.
+- **Visual Trust Score:** Provides an overall percentage score (Verified=100%, Uncertain=50%, Hallucinated=0%) with a dynamic gauge.
+- **API Key Rotation & Cooldown:** Automatically switches between multiple Gemini API keys with a 60s cooldown to bypass free-tier rate limits.
+- **Multi-LLM Fallback:** Uses Groq (Llama 3.3-70B) as a zero-downtime fallback if all Gemini keys are exhausted.
+- **Parallel Processing:** Verifies multiple claims simultaneously for near-instant results.
+- **Dark/Light Mode:** Fully responsive UI with a high-tech "Cyber" dark mode and a clean, professional light mode.
+- **Citation Verification:** Checks if mentioned sources actually exist and provides direct evidence links.
+- **Multilingual Support:** Automatically detects the input language (e.g., Hindi, Spanish) and provides verification explanations in the native language.
 
 ---
 
-## 🏗️ System Architecture
+## 🛠️ Tech Stack
+- **Frontend**: React, TypeScript, Vite, Tailwind CSS, Shadcn UI, Lucide React.
+- **Backend**: FastAPI, Python, Uvicorn, Pydantic.
+- **AI Models**: Google Gemini 3 Flash (Preview), Groq (Llama 3.3 70B).
+- **Search APIs**: Tavily AI (Primary/High-Quality), DuckDuckGo Search (Fallback/Zero-Config).
+- **Theme Management**: `next-themes`.
 
-```mermaid
+---
+## System Architecture
+```
 graph TD
     User([User]) -->|Highlights text / Pastes text| FE[Frontend Chrome Ext / React Web]
     FE -->|Sends raw text| API[Node.js / Express Backend API]
@@ -31,42 +38,18 @@ graph TD
     API -->|Displays Trust Score & UI| FE
 ```
 
-## 🎯 Use Case Diagram
+----
 
-```mermaid
-mindmap
-  root((TrustGuard AI))
-    Researchers
-      Validate academic facts
-      Check AI output citations
-    Journalists
-      Fact-check breaking news
-      Uncover hallucinations
-    Everyday Readers
-      Verify social media claims
-      Ensure news reliability
-```
+## 🔑 Supported Models
+
+| Model | Provider | Speed | Quality | Free Tier |
+|-------|----------|-------|---------|-----------|
+| **Claude Sonnet 4** | Anthropic | Fast | Excellent | No (Paid) |
+| **Gemini 1.5 Flash** | Google | Very Fast | Good | Yes |
+| **Llama 3.3 70B** | Groq | Ultra Fast | Good | Yes |
+| **Mistral 7B** | OpenRouter | Fast | Decent | Yes |
 
 ---
-
-## 🛠️ Technology Stack
-
-**Frontend**
-- React 18 & TypeScript
-- Vite, Tailwind CSS, & Shadcn UI
-- React Query & Supabase
-- Lucide Icons & next-themes
-
-**Backend**
-- Node.js & Express
-- Integration with AI providers (Anthropic, Google, Groq, OpenRouter)
-- Real-time Search APIs (DuckDuckGo, Tavily AI)
-
-**Browser Extension**
-- Chrome Extension (Manifest V3 compatible)
-
----
-
 ## 📦 Setup and Installation
 
 ### Prerequisites
@@ -134,7 +117,8 @@ npm run dev
 - **Enhanced Search Integrations:** Add specialized search endpoints for medical, legal, or financial fact-checking.
 - **Deepfake Detection:** Integrate visual and audio analysis to verify multimedia content alongside text.
 - **Collaborative Fact-Checking:** Allow community annotations and upvoting for edge-case claims.
-
+- **Deep Fake & Synthetic Media Detection:** Integrate visual and audio analysis to verify multimedia content alongside text.
+- **Image Verification:** Integrate visual and audio analysis to verify multimedia content alongside text.
 ---
 
 ## 🤝 Contributing
@@ -143,4 +127,4 @@ Contributions are welcome! Whether it's adding new AI model integrations, improv
 
 ## 📄 License
 
-This project is licensed under the MIT License. Use freely!
+MIT License - Use freely!
