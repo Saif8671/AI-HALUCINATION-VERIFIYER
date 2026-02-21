@@ -25,19 +25,30 @@ TrustGuard AI is a comprehensive AI safety tool consisting of a **FastAPI Backen
 
 ---
 ## System Architecture
-```
+```mermaid
 graph TD
-    User([User]) -->|Highlights text / Pastes text| FE[Frontend Chrome Ext / React Web]
-    FE -->|Sends raw text| API[Node.js / Express Backend API]
-    API -->|Extracts Claims & Verifies| LLM{LLM Router Provider}
-    LLM -->|Primary| Gemini(Google Gemini / Claude)
-    LLM -.->|Fallback| Groq(Groq / Llama 3)
-    Gemini <-->|Live Data Search| WebSearch[(DuckDuckGo / Tavily)]
-    Groq <-->|Live Data Search| WebSearch
-    LLM -->|Returns Fact-check Analysis| API
-    API -->|Displays Trust Score & UI| FE
-```
+    User([User])
+    FE[Web Dashboard / Chrome Extension]
+    API[Node.js + Express Backend]
+    Router{LLM Router}
+    Gemini[Gemini]
+    Claude[Claude]
+    Groq[Groq]
+    OpenRouter[OpenRouter]
+    Search[(Live Web Search APIs)]
 
+    User --> FE
+    FE --> API
+    API --> Router
+    Router --> Gemini
+    Router --> Claude
+    Router --> Groq
+    Router --> OpenRouter
+    Gemini --> Search
+    Claude --> Search
+    Groq --> Search
+    API --> FE
+```
 ----
 
 ## 🔑 Supported Models
