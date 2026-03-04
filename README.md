@@ -1,141 +1,299 @@
-# 1. Problem Statement
-Generative AI models often produce "hallucinations"—factual errors presented with high confidence—and fake citations. This undermines trust in AI-generated content for research, journalism, and decision-making. **TrustGuard AI** serves as a "Truth Layer" that automatically extracts factual claims from any text, cross-references them with real-time web search data, and provides a visual trust score to help users distinguish between fact and fiction.
+<div align="center">
 
-## 🚀 Project Overview
-TrustGuard AI is a comprehensive AI safety tool consisting of a **FastAPI Backend**, a **React Web Dashboard**, and a **Chrome Extension**. It allows users to highlight any text on the web and instantly verify its accuracy. The system uses Google Gemini 3 Flash (Preview) for claim extraction and verification, combined with DuckDuckGo for real-time fact-checking.
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,100:7c3aed&height=200&section=header&text=TrustGuard%20AI&fontSize=52&fontColor=ffffff&fontAlignY=38&desc=The%20Truth%20Layer%20for%20AI-Generated%20Content&descSize=18&descAlignY=58" width="100%"/>
 
-### ✨ Key Features:
-- **Real-time Fact Checking:** Cross-references claims with live search results using AI-generated search queries.
-- **Visual Trust Score:** Provides an overall percentage score (Verified=100%, Uncertain=50%, Hallucinated=0%) with a dynamic gauge.
-- **API Key Rotation & Cooldown:** Automatically switches between multiple Gemini API keys with a 60s cooldown to bypass free-tier rate limits.
-- **Multi-LLM Fallback:** Uses Groq (Llama 3.3-70B) as a zero-downtime fallback if all Gemini keys are exhausted.
-- **Parallel Processing:** Verifies multiple claims simultaneously for near-instant results.
-- **Dark/Light Mode:** Fully responsive UI with a high-tech "Cyber" dark mode and a clean, professional light mode.
-- **Citation Verification:** Checks if mentioned sources actually exist and provides direct evidence links.
-- **Multilingual Support:** Automatically detects the input language (e.g., Hindi, Spanish) and provides verification explanations in the native language.
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_App-7c3aed?style=for-the-badge&logo=vercel&logoColor=white)](#)
+[![Demo Video](https://img.shields.io/badge/Demo_Video-Watch-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](#)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org)
+[![Gemini](https://img.shields.io/badge/Gemini_Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://deepmind.google/technologies/gemini)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
+> AI hallucinates. **TrustGuard** catches it.  
+> Real-time claim extraction, live web cross-referencing, and visual trust scoring —  
+> as a **Web Dashboard**, **FastAPI Backend**, and **Chrome Extension**.
+
+
+
+
+</div>
+
+---
+
+## 🧩 The Problem
+
+| Issue | Real-World Impact |
+|---|---|
+| 🤖 AI hallucinations | Fabricated facts presented with full confidence |
+| 📚 Fake citations | Non-existent papers and sources cited as real |
+| 🔍 No verification layer | Users have no fast way to cross-check AI output |
+| 🌐 Research & journalism risk | Misinformation propagates before it's caught |
+
+**TrustGuard AI** sits between AI-generated content and the user — automatically extracting every factual claim, searching the live web for evidence, and returning a verdict with a trust score in seconds.
 
 ---
 
-## 🛠️ Tech Stack
-- **Frontend**: React, TypeScript, Vite, Tailwind CSS, Shadcn UI, Lucide React.
-- **Backend**: FastAPI, Python, Uvicorn, Pydantic.
-- **AI Models**: Google Gemini 3 Flash (Preview), Groq (Llama 3.3 70B).
-- **Search APIs**: Tavily AI (Primary/High-Quality), DuckDuckGo Search (Fallback/Zero-Config).
-- **Theme Management**: `next-themes`.
+## ✨ Features
+
+### 🔍 Core Verification Engine
+- **Real-time fact checking** — live web search via Tavily AI (primary) and DuckDuckGo (fallback)
+- **Visual trust score** — dynamic gauge: Verified (100%) / Uncertain (50%) / Hallucinated (0%)
+- **Claim-by-claim breakdown** — every extracted claim gets its own verdict and evidence links
+- **Citation verification** — checks whether cited sources actually exist
+
+### ⚡ Reliability & Performance
+- **API key rotation** — auto-switches between multiple Gemini keys with 60s cooldown to handle free-tier limits
+- **Multi-LLM fallback** — drops to Groq (Llama 3.3-70B) if all Gemini keys are exhausted
+- **Parallel processing** — all claims verified simultaneously for near-instant results
+
+### 🌍 Accessibility
+- **Multilingual support** — detects input language and returns explanations in the native language
+- **Dark / Light mode** — high-tech Cyber dark mode + clean professional light mode
+
+### 🧩 Three Interfaces
+| Interface | How it works |
+|---|---|
+| 🌐 Web Dashboard | Paste any text → click Verify → get full trust report |
+| 🔌 Chrome Extension | Highlight text on any webpage → right-click → "Verify with TrustGuard AI" |
+| ⚙️ FastAPI Backend | REST API for programmatic access and integrations |
 
 ---
-## System Architecture
+
+## 🤖 Supported Models
+
+| Model | Provider | Speed | Quality | Free Tier |
+|---|---|---|---|---|
+| Gemini 1.5 Flash | Google | ⚡ Very Fast | ✅ Good | ✅ Yes |
+| Llama 3.3 70B | Groq | ⚡⚡ Ultra Fast | ✅ Good | ✅ Yes |
+| Claude Sonnet 4 | Anthropic | ⚡ Fast | 🌟 Excellent | ❌ Paid |
+| Mistral 7B | OpenRouter | ⚡ Fast | ➖ Decent | ✅ Yes |
+
+---
+
+## 🏗️ System Architecture
 ```mermaid
 graph TD
-    User([User])
+    User([👤 User])
     FE[Web Dashboard / Chrome Extension]
-    API[Node.js + Express Backend]
+    API[FastAPI Backend]
     Router{LLM Router}
-    Gemini[Gemini]
-    Claude[Claude]
-    Groq[Groq]
-    OpenRouter[OpenRouter]
-    Search[(Live Web Search APIs)]
+    Gemini[Gemini Flash]
+    Groq[Groq · Llama 3.3-70B]
+    Claude[Claude Sonnet]
+    OpenRouter[OpenRouter · Mistral]
+    Search[(🌐 Live Web Search\nTavily · DuckDuckGo)]
 
     User --> FE
     FE --> API
     API --> Router
     Router --> Gemini
-    Router --> Claude
     Router --> Groq
+    Router --> Claude
     Router --> OpenRouter
     Gemini --> Search
-    Claude --> Search
     Groq --> Search
+    Claude --> Search
+    OpenRouter --> Search
+    Search --> API
     API --> FE
 ```
-----
-
-## 🔑 Supported Models
-
-| Model | Provider | Speed | Quality | Free Tier |
-|-------|----------|-------|---------|-----------|
-| **Claude Sonnet 4** | Anthropic | Fast | Excellent | No (Paid) |
-| **Gemini 1.5 Flash** | Google | Very Fast | Good | Yes |
-| **Llama 3.3 70B** | Groq | Ultra Fast | Good | Yes |
-| **Mistral 7B** | OpenRouter | Fast | Decent | Yes |
 
 ---
-## 📦 Setup and Installation
+
+## 🛠️ Tech Stack
+
+### Frontend
+![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
+![shadcn/ui](https://img.shields.io/badge/shadcn/ui-000000?style=flat&logo=shadcnui&logoColor=white)
+
+### Backend
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat&logo=fastapi&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+![Uvicorn](https://img.shields.io/badge/Uvicorn-4B8BBE?style=flat&logo=python&logoColor=white)
+![Pydantic](https://img.shields.io/badge/Pydantic-E92063?style=flat&logo=pydantic&logoColor=white)
+
+### AI & Search
+![Gemini](https://img.shields.io/badge/Gemini_Flash-4285F4?style=flat&logo=google&logoColor=white)
+![Groq](https://img.shields.io/badge/Groq-F55036?style=flat&logo=groq&logoColor=white)
+![Tavily](https://img.shields.io/badge/Tavily_AI-7c3aed?style=flat&logo=searchengineland&logoColor=white)
+![DuckDuckGo](https://img.shields.io/badge/DuckDuckGo-DE5833?style=flat&logo=duckduckgo&logoColor=white)
+
+---
+
+## 📂 Project Structure
+```
+trustguard-ai/
+├── backend/
+│   ├── main.py                  # FastAPI app entry point
+│   ├── routers/
+│   │   └── verify.py            # /verify endpoint
+│   ├── services/
+│   │   ├── llm_router.py        # Multi-LLM routing + key rotation
+│   │   ├── claim_extractor.py   # Gemini claim extraction
+│   │   ├── fact_checker.py      # Search + verification logic
+│   │   └── search.py            # Tavily + DuckDuckGo fallback
+│   ├── models/
+│   │   └── schemas.py           # Pydantic request/response models
+│   ├── .env                     # API keys (never commit)
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── TrustGauge.tsx   # Visual trust score gauge
+│   │   │   ├── ClaimCard.tsx    # Per-claim verdict display
+│   │   │   ├── ResultPanel.tsx  # Full verification results
+│   │   │   └── ThemeToggle.tsx  # Dark/light mode switch
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   └── index.css
+│   ├── extension/               # Chrome extension source
+│   │   ├── manifest.json
+│   │   ├── background.js
+│   │   └── content.js
+│   ├── .env
+│   └── package.json
+└── README.md
+```
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js (v18 or higher)
-- API Keys for your preferred LLM providers (e.g., Groq, Gemini, Claude)
+- Node.js **v18+**
+- Python **3.9+**
+- API keys for at least one LLM provider
 
-### 1. Backend Setup
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Saif8671/trustguard-ai.git
+cd trustguard-ai
+```
 
-Navigate to the backend directory and install dependencies:
-
+### 2. Backend Setup
 ```bash
 cd backend
-npm install
+pip install -r requirements.txt
 ```
 
-Create a `.env` file in the `backend` directory with your API keys:
+Create a `.env` file in the `backend/` directory:
 ```env
-PORT=8000
-GROQ_API_KEY=your_groq_api_key
 GEMINI_API_KEY=your_gemini_api_key
+GEMINI_API_KEY_2=your_second_key        # optional — enables key rotation
+GROQ_API_KEY=your_groq_api_key
 CLAUDE_API_KEY=your_claude_api_key
+TAVILY_API_KEY=your_tavily_api_key
 ```
 
-Start the backend development server:
+Start the backend:
 ```bash
-npm run dev
+uvicorn main:app --reload --port 8000
 ```
 
-### 2. Frontend Web Dashboard Setup
-
-Open a new terminal, navigate to the frontend directory, and install dependencies:
-
+### 3. Frontend Setup
 ```bash
 cd frontend
 npm install
 ```
 
-Create a `.env` file in the `frontend` directory:
+Create a `.env` file in the `frontend/` directory:
 ```env
 VITE_API_URL=http://localhost:8000
 ```
 
-Start the frontend development server:
+Start the frontend:
 ```bash
 npm run dev
 ```
 
-### 3. Chrome Extension Setup
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-1. Open Google Chrome and navigate to `chrome://extensions/`.
-2. Enable **Developer mode** in the top right corner.
-3. Click **Load unpacked**.
-4. Select the `frontend/extension` folder from this repository.
+### 4. Chrome Extension Setup
+
+1. Open Chrome and go to `chrome://extensions/`
+2. Enable **Developer mode** (top-right toggle)
+3. Click **Load unpacked**
+4. Select the `frontend/extension/` folder
+
+> ⚠️ **Never commit your `.env` files.** Ensure both are listed in `.gitignore`.
 
 ---
 
-## 📖 Usage Instructions
+## 📖 Usage
 
-1. **Web Dashboard:** Open the web interface running on localhost, paste any text (such as an AI-generated article), and click "Verify Content" to see a complete claim breakdown and trust score.
-2. **Chrome Extension:** Highlight any questionable text on any webpage, right-click, and select **"Verify with TrustGuard AI"**. A floating Truth Layer will display the fact-check results instantly.
+### Web Dashboard
+1. Open the app at `localhost:5173`
+2. Paste any AI-generated or questionable text
+3. Click **"Verify Content"**
+4. Review the trust score, claim verdicts, and evidence links
 
-## 🚀 Future Enhancements
+### Chrome Extension
+1. Highlight any text on any webpage
+2. Right-click → **"Verify with TrustGuard AI"**
+3. A floating Truth Layer panel displays results inline
 
-- **User Accounts & History:** Allow users to save their verification results and build a personal fact-checking database.
-- **Enhanced Search Integrations:** Add specialized search endpoints for medical, legal, or financial fact-checking.
-- **Deepfake Detection:** Integrate visual and audio analysis to verify multimedia content alongside text.
-- **Collaborative Fact-Checking:** Allow community annotations and upvoting for edge-case claims.
-- **Deep Fake & Synthetic Media Detection:** Integrate visual and audio analysis to verify multimedia content alongside text.
-- **Image Verification:** Integrate visual and audio analysis to verify multimedia content alongside text.
+### API (Direct)
+```bash
+curl -X POST http://localhost:8000/verify \
+  -H "Content-Type: application/json" \
+  -d '{"text": "The Eiffel Tower was built in 1887 and stands 450 meters tall."}'
+```
+
+---
+
+## 🖼️ Screenshots
+
+| Web Dashboard — Dark Mode | Web Dashboard — Light Mode |
+|---|---|
+| ![Dark](https://via.placeholder.com/420x260/0d1117/7c3aed?text=Dark+Mode) | ![Light](https://via.placeholder.com/420x260/f8f8f8/7c3aed?text=Light+Mode) |
+
+| Chrome Extension | Trust Score Gauge |
+|---|---|
+| ![Extension](https://via.placeholder.com/420x260/0d1117/7c3aed?text=Chrome+Extension) | ![Gauge](https://via.placeholder.com/420x260/0d1117/7c3aed?text=Trust+Gauge) |
+
+*(Replace placeholders with actual screenshots)*
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] User accounts and verification history
+- [ ] Specialized search for medical, legal, and financial claims
+- [ ] Deepfake and synthetic media detection (image + audio)
+- [ ] Community annotations and collaborative fact-checking
+- [ ] Browser extension for Firefox and Edge
+- [ ] Exportable verification reports (PDF)
+- [ ] Webhook integration for Slack and Teams alerts
+
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Whether it's adding new AI model integrations, improving the search fallback logic, or refining the UI, please feel free to submit a Pull Request.
+Contributions are welcome — new LLM integrations, improved search fallback logic, UI refinements, or language support.
+
+1. Fork the repo
+2. Create a branch: `git checkout -b feat/your-feature`
+3. Commit: `git commit -m "feat: describe your change"`
+4. Push and open a PR
+
+---
 
 ## 📄 License
 
-MIT License - Use freely!
+MIT © [Saif ur Rahman](https://github.com/Saif8671)
+
+---
+
+<div align="center">
+
+Because the truth still matters. 🔍
+
+[![GitHub](https://img.shields.io/badge/GitHub-Saif8671-100000?style=flat&logo=github)](https://github.com/Saif8671)
+[![Portfolio](https://img.shields.io/badge/Portfolio-Visit-00C7B7?style=flat&logo=netlify)](https://saif-portfolio8671.netlify.app)
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:7c3aed,100:0d1117&height=100&section=footer" width="100%"/>
+
+</div>
