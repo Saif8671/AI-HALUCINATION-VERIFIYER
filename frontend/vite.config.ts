@@ -8,12 +8,26 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    allowedHosts: [
+      "ai-halucination-verifiyer-1.onrender.com",
+      "localhost",
+      "127.0.0.1",
+      "::1",
+    ],
     proxy: {
       "/api": {
         target: "http://localhost:3001",
         changeOrigin: true,
       },
     },
+  },
+  preview: {
+    allowedHosts: [
+      "ai-halucination-verifiyer-1.onrender.com",
+      "localhost",
+      "127.0.0.1",
+      "::1",
+    ],
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {

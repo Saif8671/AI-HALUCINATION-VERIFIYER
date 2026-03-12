@@ -1,0 +1,40 @@
+# render.yaml
+services:
+  # Backend Web Service
+  - type: web
+    name: ai-hallucination-verifier-api
+    env: node
+    region: oregon # or choose your preferred region
+    buildCommand: "cd backend && npm install"
+    startCommand: "cd backend && npm start"
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: NODE_ENV
+        value: production
+      # Prompt the user to sync these variables from Render's dashboard:
+      - key: CLAUDE_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+
+  # Frontend Static Site
+  - type: web
+    name: ai-hallucination-verifier-ui
+    env: static
+    region: oregon # or choose your preferred region
+    buildCommand: "cd frontend && npm install && npm run build"
+    staticPublishPath: "./frontend/dist"
+    envVars:
+      - key: NODE_VERSION
+        value: "20.10.0" # Make sure to specify an appropriate Node.js version
+      # Automatically map the deployed backend URL to the Vite API URL variable
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: ai-hallucination-verifier-api
+          envVarKey: RENDER_EXTERNAL_URL
