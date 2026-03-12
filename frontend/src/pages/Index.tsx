@@ -19,7 +19,14 @@ const Index = () => {
         />
       </Helmet>
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background relative overflow-hidden">
+        {/* Ambient Background Elements */}
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+          <div className="absolute top-[10%] left-[-10%] w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] animate-float" />
+          <div className="absolute bottom-[10%] right-[-10%] w-[500px] h-[500px] bg-accent/5 rounded-full blur-[100px] animate-float" style={{ animationDelay: '-5s' }} />
+          <div className="star-field opacity-10" />
+        </div>
+
         <Header />
         <HeroSection />
 
@@ -72,33 +79,37 @@ const Index = () => {
                     title: "Paste Content",
                     description:
                       "Input any AI-generated text you want to verify",
+                    color: "primary",
                   },
                   {
                     step: "02",
                     title: "AI Analysis",
                     description:
                       "Our system detects claims and cross-checks sources",
+                    color: "accent",
                   },
                   {
                     step: "03",
                     title: "Get Results",
                     description:
                       "View detailed verification status for each claim",
+                    color: "primary",
                   },
-                ].map(({ step, title, description }) => (
+                ].map(({ step, title, description, color }) => (
                   <div
                     key={step}
-                    className="glass rounded-2xl p-6 text-center hover:border-primary/30 transition-all duration-300"
+                    className="glass rounded-2xl p-8 text-center glass-hover group border-t-2"
+                    style={{ borderTopColor: `hsl(var(--${color}))` }}
                   >
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-4">
-                      <span className="font-mono font-bold text-primary">
+                    <div className="w-16 h-16 rounded-2xl bg-muted/10 border border-border flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-500">
+                      <span className="font-mono font-bold text-2xl text-gradient-primary">
                         {step}
                       </span>
                     </div>
-                    <h3 className="font-mono font-semibold text-foreground mb-2">
+                    <h3 className="font-mono font-bold text-xl text-foreground mb-3 tracking-tight">
                       {title}
                     </h3>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
                       {description}
                     </p>
                   </div>

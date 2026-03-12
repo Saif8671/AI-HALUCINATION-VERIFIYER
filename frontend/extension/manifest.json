@@ -8,7 +8,6 @@
     "scripting",
     "contextMenus"
   ],
-<<<<<<< HEAD
   "host_permissions": [
     "http://localhost:8000/*",
     "https://trustguard-backend-5x5q.onrender.com/*"
@@ -35,22 +34,11 @@
       ]
     }
   ],
-=======
-  "action": {
-    "default_popup": "popup.html"
-  },
->>>>>>> 9233c0b2173e78e87f4038743812522fb3b03b15
   "content_scripts": [
     {
       "matches": [
         "<all_urls>"
       ],
-<<<<<<< HEAD
-      "css": [
-        "styles.css"
-      ],
-=======
->>>>>>> 9233c0b2173e78e87f4038743812522fb3b03b15
       "js": [
         "content.js"
       ]

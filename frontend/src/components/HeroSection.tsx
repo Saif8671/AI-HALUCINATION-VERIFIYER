@@ -11,35 +11,41 @@ export const HeroSection = () => {
     <div className="relative overflow-hidden py-12 md:py-16">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-grid opacity-20" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
-      <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-accent/5 rounded-full blur-3xl animate-float" />
+      <div className="star-field" />
       
+      {/* Mesh Gradient Blobs */}
+      <div className="mesh-gradient">
+        <div className="mesh-blob w-[500px] h-[500px] bg-primary/20 -top-20 -left-20 animate-float" />
+        <div className="mesh-blob w-[400px] h-[400px] bg-accent/20 bottom-0 right-0 animate-float" style={{ animationDelay: '-3s' }} />
+        <div className="mesh-blob w-[300px] h-[300px] bg-purple-500/10 top-1/4 right-1/4 animate-pulse-glow" />
+      </div>
+
       <div className="relative container mx-auto px-4 text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-          <img src="/logo.png" alt="Logo" className="w-4 h-4 rounded-sm" />
-          <span className="text-sm font-mono text-primary">AI Safety Tool</span>
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6 animate-float">
+          <img src="/logo.png" alt="TrustGuard AI Logo" className="w-6 h-6 rounded-full object-contain" />
+          <span className="text-[10px] font-mono font-bold text-primary tracking-widest uppercase">Verified AI Safety</span>
         </div>
 
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-mono font-bold text-foreground mb-4 leading-tight">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-mono font-bold text-foreground mb-4 leading-[1.1] tracking-tighter">
           Detect AI
-          <span className="text-gradient-primary"> Hallucinations</span>
+          <span className="text-gradient block md:inline"> Hallucinations</span>
           <br />
-          <span className="text-muted-foreground">Before They Spread</span>
+          <span className="text-muted-foreground/60">Before They Spread</span>
         </h1>
 
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
-          Verify AI-generated content in seconds. Cross-check facts, validate citations, 
-          and identify potential misinformation with our intelligent analysis engine.
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed font-light">
+          Verify AI-generated content in seconds. High-fidelity fact-checking, 
+          citation validation, and misinformation detection powered by advanced AI.
         </p>
 
-        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-3 md:gap-5">
           {features.map(({ icon: Icon, text }) => (
             <div
               key={text}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary/50 border border-border"
+              className="glass px-6 py-3 rounded-xl flex items-center gap-3 glass-hover group"
             >
-              <Icon className="w-4 h-4 text-primary" />
-              <span className="text-sm font-mono text-foreground">{text}</span>
+              <Icon className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
+              <span className="text-sm font-mono font-medium text-foreground">{text}</span>
             </div>
           ))}
         </div>

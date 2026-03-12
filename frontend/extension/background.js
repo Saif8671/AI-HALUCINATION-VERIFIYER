@@ -1,6 +1,6 @@
 // Configuration
-const API_BASE_URL = "http://localhost:8000"; // UNCOMMENT FOR LOCAL DEV
-// const API_BASE_URL = "https://trustguard-backend-5x5q.onrender.com"; // CHANGE THIS TO YOUR DEPLOYED BACKEND URL
+const API_BASE_URL = "http://localhost:3001"; // Local dev
+// const API_BASE_URL = "https://trustguard-backend-5x5q.onrender.com"; // Deployed backend
 
 
 chrome.runtime.onInstalled.addListener(() => {
