@@ -26,7 +26,6 @@ services:
   - type: web
     name: ai-hallucination-verifier-ui
     env: static
-    region: oregon # or choose your preferred region
     buildCommand: "cd frontend && npm install && npm run build"
     staticPublishPath: "./frontend/dist"
     envVars:
