@@ -18,8 +18,16 @@ app.use(express.json({ limit: "10mb" }));
 const MODEL_PRIORITY = ["claude", "gemini", "groq", "openrouter"];
 
 // --------------------
-// HEALTH CHECK
+// ROOT & HEALTH CHECK
 // --------------------
+app.get("/", (req, res) => {
+  res.json({ 
+    message: "Multi-AI Verification API is active.",
+    health: "/health",
+    verify: "/api/verify"
+  });
+});
+
 app.get("/health", (req, res) => {
   res.json({ 
     status: "ok", 

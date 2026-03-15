@@ -25,7 +25,22 @@ interface BackendVerifyResponse {
   message?: string;
 }
 
-const API_URL = import.meta.env.VITE_API_URL?.trim() || "/api/verify";
+const getApiUrl = () => {
+  let url = import.meta.env.VITE_API_URL?.trim() || "";
+  if (!url) return "/api/verify";
+  
+  // Remove trailing slash
+  url = url.replace(/\/$/, "");
+  
+  // If user only provided the base domain, append the path
+  if (!url.endsWith("/api/verify")) {
+    url = `${url}/api/verify`;
+  }
+  
+  return url;
+};
+
+const API_URL = getApiUrl();
 
 const mapClaimStatus = (
   status?: BackendClaimStatus,
@@ -67,10 +82,18 @@ export const useVerification = () => {
         body: JSON.stringify({ aiText: text, model: "auto" }),
       });
 
-      const data: BackendVerifyResponse = await response.json();
+      let data: BackendVerifyResponse;
+      const responseText = await response.text();
+      
+      try {
+        data = JSON.parse(responseText);
+      } catch (e) {
+        console.error("Failed to parse response as JSON:", responseText.substring(0, 100));
+        throw new Error(`Server returned an invalid response (Status ${response.status}). This often happens if the API URL is incorrect.`);
+      }
 
       if (!response.ok) {
-        throw new Error(data.message || data.error || "Failed to verify content");
+        throw new Error(data.message || data.error || `Verification failed with status ${response.status}`);
       }
 
       const normalizedClaims: Claim[] = (data.claims || []).map((claim, index) => ({

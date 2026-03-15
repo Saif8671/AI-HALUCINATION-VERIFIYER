@@ -4,6 +4,7 @@ services:
   - type: web
     name: ai-hallucination-verifier-api
     env: node
+    plan: free
     region: oregon # or choose your preferred region
     buildCommand: "cd backend && npm install"
     startCommand: "cd backend && npm start"
