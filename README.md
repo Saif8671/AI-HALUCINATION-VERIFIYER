@@ -2,7 +2,7 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,100:7c3aed&height=200&section=header&text=TrustGuard%20AI&fontSize=52&fontColor=ffffff&fontAlignY=38&desc=The%20Truth%20Layer%20for%20AI-Generated%20Content&descSize=18&descAlignY=58" width="100%"/>
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_App-7c3aed?style=for-the-badge&logo=vercel&logoColor=white)](#)
+[![Live Demo]([https://img.shields.io/badge/Live_Demo-Visit_App-7c3aed?style=for-the-badge&logo=vercel&logoColor=white](https://ai-halucination-verifiyer.vercel.app/))](#)
 [![Demo Video](https://img.shields.io/badge/Demo_Video-Watch-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](#)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org)
@@ -32,7 +32,7 @@
 **TrustGuard AI** sits between AI-generated content and the user — automatically extracting every factual claim, searching the live web for evidence, and returning a verdict with a trust score in seconds.
 
 ---
-
+## ✨ deployment link:https://ai-halucination-verifiyer.vercel.app/
 ## ✨ Features
 
 ### 🔍 Core Verification Engine
