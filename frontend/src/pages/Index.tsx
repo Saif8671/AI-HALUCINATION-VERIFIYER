@@ -6,8 +6,16 @@ import { useVerification } from "@/hooks/useVerification";
 import { Helmet } from "react-helmet";
 
 const Index = () => {
-  const { claims, citations, isAnalyzing, overallScore, hasResults, analyzeText } =
-    useVerification();
+  const { 
+    claims, 
+    citations, 
+    isAnalyzing, 
+    overallScore, 
+    hasResults, 
+    analyzeText,
+    extractUrl,
+    extractPdf 
+  } = useVerification();
 
   return (
     <>
@@ -47,10 +55,16 @@ const Index = () => {
                   <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-primary/60">Phase 01: Core Ingestion</span>
                 </div>
                 <div className="glass rounded-[2.5rem] p-4 sm:p-10 border-white/5 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)]">
-                  <TextAnalyzer onAnalyze={analyzeText} isAnalyzing={isAnalyzing} />
+                  <TextAnalyzer 
+                    onAnalyze={analyzeText} 
+                    isAnalyzing={isAnalyzing} 
+                    onExtractUrl={extractUrl}
+                    onExtractPdf={extractPdf}
+                  />
                 </div>
               </div>
             </section>
+
 
             {/* Verification Phase */}
             {hasResults && (

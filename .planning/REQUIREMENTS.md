@@ -22,15 +22,8 @@
 - **Description**: Present the app with a polished glass/neon visual language and clearer hierarchy.
 - **Verification**: `frontend/src/pages/Index.tsx` and shared components.
 
-### REQ-05: Source Extraction (SE)
-- **Status**: [ ] Planned.
-- **Description**: Support PDFs and long-form URLs as verification inputs.
-- **Success Criteria**: Verified extraction from multiple file and URL formats.
-
-### REQ-06: Multilingual Verification Output (ML)
-- **Status**: [ ] Planned.
-- **Description**: Return explanations in the user's input language where possible.
-- **Success Criteria**: At least three supported languages in production flow.
+- **REQ-05: Source Extraction (SE)**: [x] Implemented. Supported via PDF upload and URL ingestion.
+- **REQ-06: Multilingual Verification (ML)**: [x] Implemented. AI auto-detects and responds in input language.
 
 ## Constraints
 - **Latency**: End-to-end verification should remain fast for short inputs.

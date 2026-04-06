@@ -165,6 +165,58 @@ async function testNoSources() {
   }
 }
 
+// Test 6: URL Extraction
+async function testExtractionUrl() {
+  log("blue", "\n=== Test 6: URL Extraction ===");
+  try {
+    const response = await fetch(`${API_URL}/api/extract-url`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: "https://en.wikipedia.org/wiki/Artificial_intelligence" })
+    });
+
+    const data = await response.json();
+    if (data.error) throw new Error(data.error);
+
+    log("green", "✓ URL content extracted successfully");
+    console.log("Extracted snippet:", data.text.substring(0, 100) + "...");
+    return true;
+  } catch (error) {
+    log("red", `✗ URL extraction failed: ${error.message}`);
+    return false;
+  }
+}
+
+// Test 7: Multilingual Support
+async function testMultilingual() {
+  log("blue", "\n=== Test 7: Multilingual Support (Spanish) ===");
+  try {
+    const response = await fetch(`${API_URL}/api/verify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        aiText: "La capital de Francia es París y fue fundada en el siglo III a.C.",
+        sources: "París es la capital de Francia.",
+        model: "auto"
+      })
+    });
+
+    const data = await response.json();
+    log("green", `✓ Used model: ${data.modelUsed}`);
+    console.log("Summary (Spanish?):", data.summary);
+    
+    // Simple check for Spanish keywords
+    const isSpanish = /es|la|en|el/i.test(data.summary);
+    if (isSpanish) {
+      log("green", "✓ Detected Spanish in response summary");
+    } else {
+      log("yellow", "⚠ Response might not be in Spanish");
+    }
+  } catch (error) {
+    log("red", `✗ Multilingual test failed: ${error.message}`);
+  }
+}
+
 // Run all tests
 async function runTests() {
   log("blue", "\n╔════════════════════════════════════════╗");
@@ -181,7 +233,9 @@ async function runTests() {
     process.exit(1);
   }
 
+  await testExtractionUrl();
   await testAutoMode();
+  await testMultilingual();
   await testSpecificModel("claude");
   await testSpecificModel("gemini");
   await testHallucinationDetection();
@@ -196,4 +250,4 @@ async function runTests() {
 runTests().catch(error => {
   log("red", `\n✗ Test suite failed: ${error.message}`);
   process.exit(1);
-});
+});

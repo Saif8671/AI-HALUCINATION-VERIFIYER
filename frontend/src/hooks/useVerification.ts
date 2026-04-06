@@ -57,7 +57,32 @@ export const useVerification = () => {
   const [overallScore, setOverallScore] = useState(0);
   const [hasResults, setHasResults] = useState(false);
 
-  const analyzeText = useCallback(async (text: string) => {
+  const extractUrl = async (url: string) => {
+    const baseUrl = API_URL.replace("/api/verify", "/api/extract-url");
+    const response = await fetch(baseUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url }),
+    });
+    if (!response.ok) throw new Error("URL extraction failed");
+    const data = await response.json();
+    return data.text;
+  };
+
+  const extractPdf = async (file: File) => {
+    const baseUrl = API_URL.replace("/api/verify", "/api/extract-pdf");
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await fetch(baseUrl, {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) throw new Error("PDF extraction failed");
+    const data = await response.json();
+    return data.text;
+  };
+
+  const analyzeText = useCallback(async (text: string, sources?: string) => {
     if (!text.trim()) {
       toast({
         title: "Empty Text",
@@ -79,7 +104,7 @@ export const useVerification = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ aiText: text, model: "auto" }),
+        body: JSON.stringify({ aiText: text, sources, model: "auto" }),
       });
 
       let data: BackendVerifyResponse;
@@ -144,5 +169,8 @@ export const useVerification = () => {
     overallScore,
     hasResults,
     analyzeText,
+    extractUrl,
+    extractPdf,
   };
 };
+

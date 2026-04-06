@@ -1,4 +1,5 @@
-S// server.js - Multi Model Verification API with Auto-Fallback
+// server.js - Multi Model Verification API with Auto-Fallback
+
 // Supports: Claude, Gemini, Groq, OpenRouter
 
 import dotenv from "dotenv";
@@ -8,14 +9,50 @@ import express from "express";
 import cors from "cors";
 import fetch from "node-fetch";
 
+import multer from "multer";
+import { extractFromUrl, extractFromPdf } from "./extract.js";
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Multer setup for PDF uploads
+const upload = multer({ 
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB
+});
+
 app.use(cors());
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json({ limit: "20mb" }));
 
 // Model priority order for fallback
 const MODEL_PRIORITY = ["claude", "gemini", "groq", "openrouter"];
+
+// --------------------
+// EXTRACTION ENDPOINTS
+// --------------------
+
+app.post("/api/extract-url", async (req, res) => {
+  try {
+    const { url } = req.body;
+    if (!url) return res.status(400).json({ error: "URL is required" });
+    
+    const text = await extractFromUrl(url);
+    res.json({ text });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/api/extract-pdf", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: "No PDF file uploaded" });
+    
+    const text = await extractFromPdf(req.file.buffer);
+    res.json({ text });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // --------------------
 // ROOT & HEALTH CHECK
@@ -24,9 +61,11 @@ app.get("/", (req, res) => {
   res.json({
     message: "Multi-AI Verification API is active.",
     health: "/health",
-    verify: "/api/verify"
+    verify: "/api/verify",
+    extract: ["/api/extract-url", "/api/extract-pdf"]
   });
 });
+
 
 app.get("/health", (req, res) => {
   res.json({
@@ -208,6 +247,11 @@ async function callModel(model, prompt) {
 // --------------------
 function buildPrompt(aiText, sources) {
   return `You are an expert fact-checker and citation verification system.
+  
+  CORE INSTRUCTIONS:
+  1. Detect the language of the AI-GENERATED TEXT below.
+  2. Provide the entire JSON response (specifically the 'summary', 'evidence', and 'recommendations' fields) in that SAME LANGUAGE.
+  3. Be objective, forensic, and thorough.
 
 ${sources?.trim()
       ? `SOURCES PROVIDED:\n${sources}\nVerify the AI-generated text against these sources.`
@@ -221,26 +265,27 @@ Respond ONLY in valid JSON format:
 {
   "overallVerdict": "verified" | "partial" | "hallucination",
   "confidenceScore": 0-100,
-  "summary": "brief summary",
+  "summary": "brief summary (in detected language)",
   "claims": [
     {
       "claim": "claim text",
       "status": "verified" | "unverified" | "false" | "unsupported",
       "confidence": 0-100,
-      "evidence": "evidence text",
+      "evidence": "evidence text (in detected language)",
       "sourceMatch": true/false
     }
   ],
   "hallucinations": [
     {
       "text": "hallucinated content",
-      "reason": "why false",
+      "reason": "why false (in detected language)",
       "severity": "low" | "medium" | "high"
     }
   ],
-  "recommendations": ["recommendation"]
+  "recommendations": ["recommendation (in detected language)"]
 }`;
 }
+
 
 // --------------------
 // CLAUDE (Anthropic)
