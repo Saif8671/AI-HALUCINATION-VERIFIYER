@@ -1,27 +1,26 @@
-# Stack: AI Hallucination Verifier
+# Stack: TrustGuard AI
 
-## Backend (Server)
-- **Runtime**: Node.js (v18+)
+## Backend
+- **Runtime**: Node.js
 - **Framework**: Express.js
-- **Key Modules**:
-  - `dotenv`: Environment variable management.
-  - `cors`: Cross-Origin Resource Sharing.
-  - `node-fetch`: HTTP client for API calls (Claude, Gemini, etc.).
+- **Role**: Verification endpoint, provider fallback, response normalization
 
-## Frontend (Client)
+## Frontend
 - **Build Tool**: Vite
-- **Framework**: React 18 (TypeScript)
+- **Framework**: React 18 + TypeScript
 - **Styling**: Tailwind CSS
-- **Components**: Shadcn/UI (Radix UI primitives)
+- **UI Primitives**: shadcn/ui and Radix-based components
 - **Icons**: Lucide React
-- **Data Fetching**: @tanstack/react-query
 - **Routing**: react-router-dom
+- **State/Data**: @tanstack/react-query and local hook-based state
 
-## AI Providers
-- **Claude**: Anthropic API (`claude-sonnet-4-20250514`)
-- **Gemini**: Google AI API (`gemini-1.5-flash`)
-- **Groq**: Groq Cloud API (`llama-3.3-70b-versatile`)
-- **OpenRouter**: Unified API (`mistralai/mistral-7b-instruct:free` as fallback)
+## Extension
+- **Target**: Chrome extension assets in `frontend/extension`
+- **Role**: Page-level verification entry points and shared branding
+
+## AI / Verification Providers
+- Multi-provider verification stack with sequential fallback
+- Claim extraction and trust scoring handled by the backend contract
 
 ## Infrastructure
-- **Deployment**: Render (`render.yaml` configured)
+- **Deployment**: Render

@@ -1,25 +1,25 @@
-# Architecture: AI Hallucination Verifier
+# Architecture: TrustGuard AI
 
 ## System Flow
-The application follows a standard client-server architecture with external LLM dependencies.
+The app uses a client-server layout with a shared verification contract and a browser extension entry point.
 
 ### 1. Request Handling
-- **Frontend**: `Index.tsx` (page) → `useVerify` (hook/mutation) → `api.verify` (service).
-- **Backend**: `server.js` (Express) → `/api/verify` (POST).
+- **Frontend**: `frontend/src/pages/Index.tsx` -> `useVerification` -> results components.
+- **Backend**: `backend/server.js` handles verification requests and provider routing.
+- **Extension**: `frontend/extension` reuses the same branding and logo assets for on-page analysis.
 
 ### 2. Verification Process
-- **Prompt Engineering**: The backend constructs a structured prompt instructing an LLM to act as a fact-checker/verifier.
-- **Model Routing**: 
-  - If `model="auto"` (default), the backend uses `callWithFallback`.
-  - Priority: `claude` → `gemini` → `groq` → `openrouter`.
-- **Local Fallback**: If all remote providers fail (e.g., missing API keys), `buildLocalFallback` provides a basic heuristic analysis (less accurate).
+- The backend builds a structured prompt for claim verification.
+- Provider routing falls back sequentially when a provider fails.
+- The response is normalized into a JSON payload that drives the claim cards, citations, and trust score gauge.
 
 ### 3. Data Flow
-- **Input**: AI-generated text + (optional) sources.
-- **Processing**: Structured JSON generation via LLM.
-- **Output**: JSON payload including overall verdict, confidence score, detailed claims, and hallucination breakdown.
+- **Input**: User text plus optional context.
+- **Processing**: Provider call, JSON normalization, claim extraction, trust scoring.
+- **Output**: Verdict, confidence, per-claim status, citation list, and supporting notes.
 
 ## Implementation Details
-- **ES Modules**: Backend uses `import` (requires `package.json` `type: "module"`).
-- **Graceful Failures**: Automatic sequential fallback through providers.
-- **Deterministic Response**: Forced JSON format via system prompt.
+- **Frontend**: React + TypeScript + Tailwind CSS.
+- **Backend**: Node.js with ES modules.
+- **UI Strategy**: Small composable components keep the dashboard readable and easy to refactor.
+- **Cleanup Rule**: Remove backup files and dead helpers instead of leaving them in the source tree.

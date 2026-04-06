@@ -1,32 +1,37 @@
-# Project: AI Hallucination Verifier
+# Project: TrustGuard AI
 
 ## What This Is
-A tool for automated verification of AI-generated content to eliminate hallucinations. It uses multiple external LLM providers (Claude, Gemini, Groq, OpenRouter) to fact-check statements against provided sources or existing web knowledge.
+TrustGuard AI is a web dashboard, browser extension, and API for verifying AI-generated claims against web evidence and returning structured verdicts with source-backed confidence scoring.
 
 ## Why This Matters
-As AI outputs become more ubiquitous, the risk of hallucinations in critical domains (legal, medical, technical) presents a significant challenge. This project provides a "Confidence Layer" that helps users trust AI outputs or identify inaccuracies before they cause harm.
+AI-generated content can look convincing even when it is wrong. This project gives users a fast verification layer so hallucinations, fake citations, and unsupported claims are easier to spot before they spread.
 
 ## Core Value
-"Confidence in AI through automated, cross-model verification."
+"Confidence in AI through automated, claim-level verification."
+
+## Current Shape
+- React/Vite frontend with a premium glass/neon visual style
+- Node/Express backend that exposes verification endpoints
+- Chrome extension for quick on-page verification
+- Shared claim, citation, and trust-score reporting across the UI
 
 ## Requirements
 
 ### Validated
-- ✓ [Existing] Multi-model support (Claude, Gemini, Groq).
-- ✓ [Existing] Automatic model fallback if primary fails.
-- ✓ [Existing] Structured JSON parsing from LLM outputs.
-- ✓ [Existing] Frontend dashboard with claim-level breakdown.
+- [x] Multi-model verification with provider fallback.
+- [x] Structured JSON parsing from model output.
+- [x] Claim-level breakdown in the frontend dashboard.
+- [x] Refined premium UI shell and logo presentation.
 
 ### Active
-- [ ] [NEW] "Liquid Glass & Neon" UI overhaul.
-- [ ] [NEW] Advanced source extraction (PDF/URL support).
-- [ ] [NEW] Real-time "Truth Trust Score" for each verification.
-- [ ] [NEW] Multi-language support for verification.
+- [ ] Advanced source extraction for PDFs and URLs.
+- [ ] Real-time trust score refinements.
+- [ ] Multi-language verification output.
 
 ## Success Criteria
-- [ ] UI achieves 10/10 "Wow" factor with premium design.
-- [ ] Verification latency under 5s for short texts.
-- [ ] Accuracy >90% on standard fact-checking benchmarks.
+- [ ] Verification latency stays low for short texts.
+- [ ] Output remains stable and machine-readable across providers.
+- [ ] The UI feels polished and intentional on desktop and mobile.
 
 ---
-*Last updated: 2026-03-29 after mapping*
+*Last updated: 2026-04-07 after cleanup*

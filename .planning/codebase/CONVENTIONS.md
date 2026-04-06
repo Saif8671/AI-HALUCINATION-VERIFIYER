@@ -1,15 +1,15 @@
-# Conventions & Concerns: AI Hallucination Verifier
+# Conventions & Concerns: TrustGuard AI
 
 ## Coding Conventions
-- **Language**: TypeScript for Frontend, JavaScript (ESM) for Backend.
-- **Component Policy**: Functional components only. Use `lucide-react` for icons and `shadcn/ui` for primitives.
-- **Styling**: Tailwind utility classes first. Follow `ThemeProvider` (dark/light mode).
-- **API Responses**: Always JSON. Backend includes `safeJSON` helper to handle LLM response parsing (removes markdown backticks).
+- **Language**: TypeScript for the frontend, JavaScript for the backend and extension scripts.
+- **Component Policy**: Prefer functional components and small composable UI pieces.
+- **Styling**: Tailwind utility classes first, with theme tokens defined centrally.
+- **Branding**: Keep logo usage consistent and avoid decorative wrappers that change the logo shape unexpectedly.
+- **Planning Hygiene**: Update the `.planning` folder when the product shape changes so docs stay aligned with the code.
 
 ## Security & Concerns
-- **API Key Leakage**: `.env` used for all keys (Claude, Gemini, Groq, OpenRouter).
-- **Cost Management**: Gemini 1.5 Flash and Mistral 7B (Mistral-7B-Instruct-v1) are used for cost-effective verification.
-- **LLM Reliability**: Hallucination detection depends entirely on the veracity of the "Truth Teller" model. High risk if the verifier itself hallucinates.
-- **JSON Parsing**: Fragile parsing of LLM responses via regex cleaning. A more robust parser or structured output feature should be used.
-- **CORS**: `cors()` is fully enabled (`*`), which is fine for local dev but should be restricted in production.
-- **Node-Fetch**: Uses `node-fetch`, which is fine but native `fetch` (Node 18+) could be used.
+- **API Keys**: Keep provider keys in environment files and out of committed source.
+- **Provider Reliability**: Verification quality depends on upstream model and search provider behavior.
+- **JSON Parsing**: Normalized structured output is required to keep the UI stable.
+- **CORS**: Lock down production origins before deployment if the API becomes public.
+- **Dead Code**: Remove stale backups, unused scripts, and unreferenced components instead of leaving them around.

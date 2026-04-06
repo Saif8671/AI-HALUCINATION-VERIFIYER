@@ -1,28 +1,36 @@
-# Roadmap: AI Hallucination Verifier
+# Roadmap: TrustGuard AI
 
-## Milestone 1: Premium Experience & Reliability
-Improve the UI to a premium level and enhance the verification accuracy.
+## Milestone 1: Product Polish & Reliability
+Keep the verification experience fast, polished, and easy to understand.
 
-### Phase 1: "Ethereal" UI Overhaul
-- **Goal**: Implement the "Liquid Glass & Neon" design system.
+### Phase 1: UI Cleanup and Visual Consistency
+- **Goal**: Maintain the premium glass/neon direction while removing stale or distracting UI elements.
+- **Status**: In progress.
+- **Notes**:
+  - Remove unused logo treatments and backup assets.
+  - Keep the header, hero, and results views visually consistent.
+  - Preserve responsive behavior on desktop and mobile.
+
+### Phase 2: Verification Expansion
+- **Goal**: Expand what the verifier can ingest and analyze.
 - **Plans**:
-  - [ ] Plan 1.1: Global CSS & Design Tokens (Inter/Space Grotesk).
-  - [ ] Plan 1.2: Glassmorphic Component Library (Cards, Inputs, Buttons).
-  - [ ] Plan 1.3: Verification Dashboard Redesign with Pulsing Indicators.
-  - [ ] Plan 1.4: Real-time "Truth Score" visualizer.
+  - PDF and URL source extraction.
+  - Improved trust-score generation.
+  - Stronger citation validation.
 
-### Phase 2: Advanced Verification & Sources
-- **Goal**: Expand verification capabilities and source handling.
+### Phase 3: Language Support
+- **Goal**: Make the verifier easier to use across languages.
 - **Plans**:
-  - [ ] Plan 2.1: PDF/URL source extraction utility.
-  - [ ] Plan 2.2: Multi-step verification (fact-check the fact-checker).
-  - [ ] Plan 2.3: Multi-language support (ES, FR, DE, ZH).
+  - Detect input language.
+  - Localize result explanations.
+  - Validate fallback behavior for non-English prompts.
 
-### Phase 3: Accuracy Benchmarking
-- **Goal**: Quantify and improve the reliability of the verifier.
+### Phase 4: Reliability Checks
+- **Goal**: Measure and improve consistency over time.
 - **Plans**:
-  - [ ] Plan 3.1: Automated evaluation suite for hallucinations.
-  - [ ] Plan 3.2: Optimization of system prompts for higher precision.
+  - Automated regression coverage for verification flows.
+  - Result stability checks across providers.
+  - Targeted cleanup of obsolete helper scripts and assets.
 
 ---
-*Last updated: 2026-03-29 after mapping*
+*Last updated: 2026-04-07 after cleanup*
