@@ -2,54 +2,57 @@ import { Shield, Zap, Eye, CheckCircle2 } from "lucide-react";
 
 export const HeroSection = () => {
   const features = [
-    { icon: Eye, text: "Claim Detection" },
+    { icon: Eye, text: "Forensic Detection" },
     { icon: CheckCircle2, text: "Source Verification" },
-    { icon: Zap, text: "Instant Analysis" },
+    { icon: Zap, text: "Real-time Analysis" },
   ];
 
   return (
-    <div className="relative overflow-hidden py-12 md:py-16">
+    <div className="relative overflow-hidden pt-32 pb-16 md:pt-48 md:pb-24">
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-grid opacity-20" />
+      <div className="absolute inset-0 bg-grid opacity-10" />
       <div className="star-field" />
       
-      {/* Mesh Gradient Blobs */}
-      <div className="mesh-gradient">
-        <div className="mesh-blob w-[500px] h-[500px] bg-primary/20 -top-20 -left-20 animate-float" />
-        <div className="mesh-blob w-[400px] h-[400px] bg-accent/20 bottom-0 right-0 animate-float" style={{ animationDelay: '-3s' }} />
-        <div className="mesh-blob w-[300px] h-[300px] bg-purple-500/10 top-1/4 right-1/4 animate-pulse-glow" />
-      </div>
+      {/* Luminous Ambient Glows */}
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] animate-pulse-glow" />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-tertiary/10 rounded-full blur-[100px] animate-float" />
 
-      <div className="relative container mx-auto px-4 text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6 animate-float">
-          <img src="/logo.png" alt="TrustGuard AI Logo" className="w-6 h-6 rounded-full object-contain" />
-          <span className="text-[10px] font-mono font-bold text-primary tracking-widest uppercase">Verified AI Safety</span>
-        </div>
+      <div className="relative container mx-auto px-4">
+        <div className="max-w-4xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-8 animate-neon-hum">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+            <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-muted-foreground">
+              v1.5 Premium Forensic Engine
+            </span>
+          </div>
 
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-mono font-bold text-foreground mb-4 leading-[1.1] tracking-tighter">
-          Detect AI
-          <span className="text-gradient block md:inline"> Hallucinations</span>
-          <br />
-          <span className="text-muted-foreground/60">Before They Spread</span>
-        </h1>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold text-foreground mb-6 leading-[0.9] tracking-tighter">
+            VERIFY <span className="text-primary neon-glow">AI</span>
+            <br />
+            <span className="text-muted-foreground/40">REALITY.</span>
+          </h1>
 
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed font-light">
-          Verify AI-generated content in seconds. High-fidelity fact-checking, 
-          citation validation, and misinformation detection powered by advanced AI.
-        </p>
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mb-10 leading-relaxed font-sans font-light">
+            An ethereal intelligence layer designed to identify hallucinations, 
+            validate citations, and ensure mathematical certainty in AI outputs.
+          </p>
 
-        <div className="flex flex-wrap items-center justify-center gap-3 md:gap-5">
-          {features.map(({ icon: Icon, text }) => (
-            <div
-              key={text}
-              className="glass px-6 py-3 rounded-xl flex items-center gap-3 glass-hover group"
-            >
-              <Icon className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
-              <span className="text-sm font-mono font-medium text-foreground">{text}</span>
-            </div>
-          ))}
+          <div className="flex flex-wrap items-center gap-4">
+            {features.map(({ icon: Icon, text }) => (
+              <div
+                key={text}
+                className="glass neon-border px-6 py-3 rounded-xl flex items-center gap-3 glass-hover group"
+              >
+                <Icon className="w-5 h-5 text-primary group-hover:scale-110 transition-transform duration-500" />
+                <span className="text-xs font-sans font-bold uppercase tracking-widest text-foreground">
+                  {text}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
   );
 };
+

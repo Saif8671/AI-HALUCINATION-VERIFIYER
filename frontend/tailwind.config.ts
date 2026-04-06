@@ -14,8 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
+        sans: ["Manrope", "Inter", "system-ui", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
+        display: ["Space Grotesk", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -26,10 +27,18 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          container: "hsl(var(--primary-container))",
+          dim: "hsl(var(--primary-dim))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
+          container: "hsl(var(--secondary-container))",
+        },
+        tertiary: {
+          DEFAULT: "hsl(var(--tertiary))",
+          foreground: "hsl(var(--on-tertiary))",
+          container: "hsl(var(--tertiary-container))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -67,6 +76,19 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        surface: {
+          DEFAULT: "hsl(var(--surface))",
+          container: {
+            low: "hsl(var(--surface-container-low))",
+            DEFAULT: "hsl(var(--surface-container))",
+            high: "hsl(var(--surface-container-high))",
+            highest: "hsl(var(--surface-container-highest))",
+            lowest: "hsl(var(--surface-container-lowest))",
+          },
+          dim: "hsl(var(--surface-dim))",
+          bright: "hsl(var(--surface-bright))",
+          variant: "hsl(var(--surface-variant))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -79,6 +101,7 @@ export default {
         },
       },
       borderRadius: {
+        xl: "1.5rem",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
@@ -96,13 +119,24 @@ export default {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
         },
+        "neon-hum": {
+          "0%, 100%": { opacity: "0.7" },
+          "50%": { opacity: "1" },
+        },
+        "liquid-pulse": {
+          "0%": { left: "-100%" },
+          "100%": { left: "200%" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         shimmer: "shimmer 2s linear infinite",
+        "neon-hum": "neon-hum 2s ease-in-out infinite",
+        "liquid-pulse": "liquid-pulse 3s infinite linear",
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+

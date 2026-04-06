@@ -1,4 +1,4 @@
-// server.js - Multi Model Verification API with Auto-Fallback
+S// server.js - Multi Model Verification API with Auto-Fallback
 // Supports: Claude, Gemini, Groq, OpenRouter
 
 import dotenv from "dotenv";
@@ -21,7 +21,7 @@ const MODEL_PRIORITY = ["claude", "gemini", "groq", "openrouter"];
 // ROOT & HEALTH CHECK
 // --------------------
 app.get("/", (req, res) => {
-  res.json({ 
+  res.json({
     message: "Multi-AI Verification API is active.",
     health: "/health",
     verify: "/api/verify"
@@ -29,8 +29,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/health", (req, res) => {
-  res.json({ 
-    status: "ok", 
+  res.json({
+    status: "ok",
     message: "Multi-AI Verify Server Running",
     availableModels: getAvailableModels()
   });
@@ -103,11 +103,11 @@ app.post("/api/verify", async (req, res) => {
 // --------------------
 async function callWithFallback(prompt, aiText, sources, excludeModels = []) {
   const errors = [];
-  
+
   // Try each model in priority order
   for (const modelName of MODEL_PRIORITY) {
     if (excludeModels.includes(modelName)) continue;
-    
+
     try {
       console.log(`Attempting model: ${modelName}`);
       const result = await callModel(modelName, prompt);
@@ -188,16 +188,16 @@ async function callModel(model, prompt) {
   switch (model) {
     case "claude":
       return await callClaude(prompt);
-    
+
     case "gemini":
       return await callGemini(prompt);
-    
+
     case "groq":
       return await callGroq(prompt);
-    
+
     case "openrouter":
       return await callOpenRouter(prompt);
-    
+
     default:
       throw new Error(`Invalid model: ${model}. Use: claude | gemini | groq | openrouter | auto`);
   }

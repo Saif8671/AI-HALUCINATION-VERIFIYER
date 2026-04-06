@@ -20,54 +20,64 @@ export const CitationCard = ({
   return (
     <div
       className={cn(
-        "p-3 rounded-lg border transition-all duration-300",
+        "p-4 rounded-xl glass border border-white/5 transition-all duration-500 group hover:border-primary/20 hover:bg-white/10",
         isPending
-          ? "bg-muted/30 border-border"
+          ? "opacity-60"
           : isValid
-          ? "bg-verified/5 border-verified/20"
-          : "bg-hallucinated/5 border-hallucinated/20"
+          ? "border-primary/10"
+          : "border-destructive/10"
       )}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4">
         <div
           className={cn(
-            "p-1.5 rounded-md",
+            "p-2 rounded-lg transition-all duration-500",
             isPending
-              ? "bg-muted text-muted-foreground"
+              ? "bg-white/5 text-muted-foreground"
               : isValid
-              ? "bg-verified/20 text-verified"
-              : "bg-hallucinated/20 text-hallucinated"
+              ? "bg-primary/10 text-primary shadow-[0_0_10px_rgba(0,255,255,0.1)]"
+              : "bg-destructive/10 text-destructive shadow-[0_0_10px_rgba(255,113,108,0.1)]"
           )}
         >
           <BookOpen className="w-4 h-4" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm text-foreground truncate font-mono">
+          <p className="text-sm text-foreground/80 truncate font-sans font-bold uppercase tracking-wider">
             {citation}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {isPending ? (
-            <Loader2 className="w-4 h-4 text-muted-foreground animate-spin" />
+            <div className="flex items-center gap-2">
+              <Loader2 className="w-4 h-4 text-muted-foreground animate-spin" />
+              <span className="text-[10px] font-sans font-bold text-muted-foreground/40 tracking-widest uppercase">Validating</span>
+            </div>
           ) : isValid ? (
-            <>
-              <CheckCircle2 className="w-4 h-4 text-verified" />
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-primary/10 border border-primary/20">
+                <CheckCircle2 className="w-3 h-3 text-primary" />
+                <span className="text-[9px] font-sans font-bold text-primary tracking-tighter">VERIFIED</span>
+              </div>
               {url && (
                 <a
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-accent hover:text-accent/80 transition-colors"
+                  className="p-1.5 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300"
                 >
                   <ExternalLink className="w-4 h-4" />
                 </a>
               )}
-            </>
+            </div>
           ) : (
-            <XCircle className="w-4 h-4 text-hallucinated" />
+            <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-destructive/10 border border-destructive/20">
+              <XCircle className="w-3 h-3 text-destructive" />
+              <span className="text-[9px] font-sans font-bold text-destructive tracking-tighter">INVALID</span>
+            </div>
           )}
         </div>
       </div>
     </div>
   );
 };
+
