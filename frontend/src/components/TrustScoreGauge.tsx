@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface TrustScoreGaugeProps {
@@ -7,14 +7,44 @@ interface TrustScoreGaugeProps {
 }
 
 export const TrustScoreGauge = ({ score, isAnalyzing }: TrustScoreGaugeProps) => {
-  const { color, label, iconClass } = useMemo(() => {
-    if (score >= 80) return { color: "text-primary", label: "HIGH INTEGRITY", iconClass: "shadow-[0_0_20px_rgba(0,255,255,0.3)]" };
-    if (score >= 50) return { color: "text-warning", label: "MODERATE RISK", iconClass: "shadow-[0_0_20px_rgba(242,201,76,0.3)]" };
-    return { color: "text-destructive", label: "CRITICAL BREACH", iconClass: "shadow-[0_0_20px_rgba(255,113,108,0.3)]" };
+  const [displayScore, setDisplayScore] = useState(0);
+
+  const { color, label } = useMemo(() => {
+    if (score >= 80) return { color: "text-primary", label: "HIGH INTEGRITY" };
+    if (score >= 50) return { color: "text-warning", label: "MODERATE RISK" };
+    return { color: "text-destructive", label: "CRITICAL BREACH" };
   }, [score]);
 
+  useEffect(() => {
+    if (isAnalyzing) {
+      setDisplayScore(0);
+    } else {
+      const duration = 2000;
+      const startValue = 0;
+      const endValue = score;
+      const startTime = performance.now();
+
+      const animate = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // easeOutQuart
+        const easedProgress = 1 - Math.pow(1 - progress, 4);
+        const currentValue = Math.floor(startValue + (endValue - startValue) * easedProgress);
+
+        setDisplayScore(currentValue);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      };
+
+      requestAnimationFrame(animate);
+    }
+  }, [score, isAnalyzing]);
+
   const circumference = 2 * Math.PI * 45;
-  const strokeDashoffset = circumference - (score / 100) * circumference;
+  const currentOffset = circumference - (displayScore / 100) * circumference;
 
   return (
     <div className="flex flex-col items-center gap-6 py-4">
@@ -43,8 +73,8 @@ export const TrustScoreGauge = ({ score, isAnalyzing }: TrustScoreGaugeProps) =>
             strokeWidth="6"
             strokeLinecap="round"
             strokeDasharray={circumference}
-            strokeDashoffset={isAnalyzing ? circumference * 0.75 : strokeDashoffset}
-            className={cn(color, "transition-all duration-1000 ease-out", isAnalyzing && "animate-[spin_3s_linear_infinite]")}
+            strokeDashoffset={isAnalyzing ? circumference * 0.75 : currentOffset}
+            className={cn(color, "transition-all duration-700 ease-out", isAnalyzing && "animate-[spin_3s_linear_infinite]")}
             style={{ 
               filter: "drop-shadow(0 0 12px currentColor)",
               transitionProperty: "stroke-dashoffset, stroke, filter" 
@@ -55,7 +85,7 @@ export const TrustScoreGauge = ({ score, isAnalyzing }: TrustScoreGaugeProps) =>
         <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
           <div className="flex items-baseline gap-1">
             <span className={cn("text-5xl font-display font-medium tracking-tighter", color)}>
-              {isAnalyzing ? "..." : score}
+              {isAnalyzing ? "..." : displayScore}
             </span>
             {!isAnalyzing && <span className="text-[10px] font-sans font-bold text-muted-foreground/30 uppercase tracking-widest">Score</span>}
           </div>
@@ -77,4 +107,3 @@ export const TrustScoreGauge = ({ score, isAnalyzing }: TrustScoreGaugeProps) =>
     </div>
   );
 };
-

@@ -249,8 +249,8 @@ function buildPrompt(aiText, sources) {
   return `You are an expert fact-checker and citation verification system.
   
   CORE INSTRUCTIONS:
-  1. Detect the language of the AI-GENERATED TEXT below.
-  2. Provide the entire JSON response (specifically the 'summary', 'evidence', and 'recommendations' fields) in that SAME LANGUAGE.
+  1. Detect the language of the AI-GENERATED TEXT below, but ALWAYS provide the response in ENGLISH.
+  2. Provide the entire JSON response (specifically the 'summary', 'evidence', 'reason', and 'recommendations' fields) in ENGLISH.
   3. Be objective, forensic, and thorough.
 
 ${sources?.trim()
