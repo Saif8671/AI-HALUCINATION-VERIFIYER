@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { Claim, Citation } from "@/components/AnalysisResults";
 import { toast } from "@/hooks/use-toast";
 
@@ -25,22 +25,94 @@ interface BackendVerifyResponse {
   message?: string;
 }
 
-const getApiUrl = () => {
-  let url = import.meta.env.VITE_API_URL?.trim() || "";
-  if (!url) return "/api/verify";
-  
-  // Remove trailing slash
-  url = url.replace(/\/$/, "");
-  
-  // If user only provided the base domain, append the path
-  if (!url.endsWith("/api/verify")) {
-    url = `${url}/api/verify`;
+const normalizeEndpointCandidates = () => {
+  const envUrl = import.meta.env.VITE_API_URL?.trim() || "";
+  const candidates = new Set<string>();
+
+  const addCandidatesFromBase = (base: string) => {
+    const normalized = base.replace(/\/$/, "");
+
+    if (normalized.endsWith("/api/verify") || normalized.endsWith("/verify")) {
+      candidates.add(normalized);
+      return;
+    }
+
+    candidates.add(`${normalized}/api/verify`);
+    candidates.add(`${normalized}/verify`);
+  };
+
+  if (envUrl) {
+    addCandidatesFromBase(envUrl);
   }
-  
-  return url;
+
+  addCandidatesFromBase("http://localhost:3001");
+
+  return [...candidates];
 };
 
-const API_URL = getApiUrl();
+const VERIFY_URLS = normalizeEndpointCandidates();
+
+const toRelatedEndpoint = (verifyUrl: string, apiPath: string, plainPath: string) => {
+  if (verifyUrl.endsWith("/api/verify")) {
+    return verifyUrl.replace("/api/verify", apiPath);
+  }
+
+  if (verifyUrl.endsWith("/verify")) {
+    return verifyUrl.replace("/verify", plainPath);
+  }
+
+  const normalized = verifyUrl.replace(/\/$/, "");
+  return `${normalized}${apiPath}`;
+};
+
+const isLikelyHtml = (text: string) => /<!doctype html>|<html[\s>]/i.test(text);
+
+const requestJsonWithFallback = async <T,>(
+  urls: string[],
+  init: RequestInit,
+  failureLabel: string,
+): Promise<T> => {
+  const errors: string[] = [];
+
+  for (const url of urls) {
+    try {
+      const response = await fetch(url, init);
+      const responseText = await response.text();
+
+      let data: T | null = null;
+      try {
+        data = JSON.parse(responseText) as T;
+      } catch {
+        if (isLikelyHtml(responseText) || response.status >= 500) {
+          errors.push(`${url} returned non-JSON (${response.status})`);
+          continue;
+        }
+
+        throw new Error(`Server returned invalid JSON from ${url}`);
+      }
+
+      if (!response.ok) {
+        const message =
+          (data as BackendVerifyResponse | null)?.message ||
+          (data as BackendVerifyResponse | null)?.error ||
+          `Request failed with status ${response.status}`;
+
+        if (response.status >= 500 || response.status === 404 || response.status === 502 || response.status === 503) {
+          errors.push(`${url} returned ${response.status}`);
+          continue;
+        }
+
+        throw new Error(message);
+      }
+
+      return data as T;
+    } catch (error: any) {
+      errors.push(`${url}: ${error.message}`);
+    }
+  }
+
+  throw new Error(`${failureLabel}. Tried: ${errors.join(" | ")}`);
+};
 
 const mapClaimStatus = (
   status?: BackendClaimStatus,
@@ -58,31 +130,44 @@ export const useVerification = () => {
   const [hasResults, setHasResults] = useState(false);
 
   const extractUrl = async (url: string) => {
-    const baseUrl = API_URL.replace("/api/verify", "/api/extract-url");
-    const response = await fetch(baseUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url }),
-    });
-    if (!response.ok) throw new Error("URL extraction failed");
-    const data = await response.json();
-    return data.text;
+    const urls = VERIFY_URLS.map((verifyUrl) =>
+      toRelatedEndpoint(verifyUrl, "/api/extract-url", "/extract-url"),
+    );
+
+    const data = await requestJsonWithFallback<{ text?: string }>(
+      urls,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      },
+      "URL extraction failed",
+    );
+
+    return data.text || "";
   };
 
   const extractPdf = async (file: File) => {
-    const baseUrl = API_URL.replace("/api/verify", "/api/extract-pdf");
+    const urls = VERIFY_URLS.map((verifyUrl) =>
+      toRelatedEndpoint(verifyUrl, "/api/extract-pdf", "/extract-pdf"),
+    );
+
     const formData = new FormData();
     formData.append("file", file);
-    const response = await fetch(baseUrl, {
-      method: "POST",
-      body: formData,
-    });
-    if (!response.ok) throw new Error("PDF extraction failed");
-    const data = await response.json();
-    return data.text;
+
+    const data = await requestJsonWithFallback<{ text?: string }>(
+      urls,
+      {
+        method: "POST",
+        body: formData,
+      },
+      "PDF extraction failed",
+    );
+
+    return data.text || "";
   };
 
-  const analyzeText = useCallback(async (text: string, sources?: string) => {
+  const analyzeText = useCallback(async (text: string, sources?: string, model: string = "auto") => {
     if (!text.trim()) {
       toast({
         title: "Empty Text",
@@ -99,27 +184,17 @@ export const useVerification = () => {
     setOverallScore(0);
 
     try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const data = await requestJsonWithFallback<BackendVerifyResponse>(
+        VERIFY_URLS,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ aiText: text, sources, model }),
         },
-        body: JSON.stringify({ aiText: text, sources, model: "auto" }),
-      });
-
-      let data: BackendVerifyResponse;
-      const responseText = await response.text();
-      
-      try {
-        data = JSON.parse(responseText);
-      } catch (e) {
-        console.error("Failed to parse response as JSON:", responseText.substring(0, 100));
-        throw new Error(`Server returned an invalid response (Status ${response.status}). This often happens if the API URL is incorrect.`);
-      }
-
-      if (!response.ok) {
-        throw new Error(data.message || data.error || `Verification failed with status ${response.status}`);
-      }
+        "Verification server returned an invalid response",
+      );
 
       const normalizedClaims: Claim[] = (data.claims || []).map((claim, index) => ({
         id: `claim-${index + 1}`,

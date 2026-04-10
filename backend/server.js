@@ -54,6 +54,30 @@ app.post("/api/extract-pdf", upload.single("file"), async (req, res) => {
   }
 });
 
+// Plain-path aliases for deployments or clients that don't include /api
+app.post("/extract-url", async (req, res) => {
+  try {
+    const { url } = req.body;
+    if (!url) return res.status(400).json({ error: "URL is required" });
+
+    const text = await extractFromUrl(url);
+    res.json({ text });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/extract-pdf", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: "No PDF file uploaded" });
+
+    const text = await extractFromPdf(req.file.buffer);
+    res.json({ text });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // --------------------
 // ROOT & HEALTH CHECK
 // --------------------

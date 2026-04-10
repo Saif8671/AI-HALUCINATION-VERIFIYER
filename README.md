@@ -4,7 +4,7 @@
 
 [![Live Demo](https://img.shields.io/badge/🔗%20Live%20Demo-ai--halucination--verifiyer.vercel.app-7c3aed?style=for-the-badge&logo=vercel&logoColor=white)](https://ai-halucination-verifiyer.vercel.app/)
 
-![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?style=flat-square&logo=express&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)
 ![Gemini](https://img.shields.io/badge/Gemini%20Flash-4285F4?style=flat-square&logo=google&logoColor=white)
@@ -19,7 +19,7 @@
 
 **TrustGuard AI** sits between AI-generated content and the user — automatically extracting every factual claim, searching the live web for evidence, and returning a per-claim verdict with a visual trust score in seconds.
 
-AI hallucinates. TrustGuard catches it. Available as a web dashboard, FastAPI backend, and Chrome extension.
+AI hallucinates. TrustGuard catches it. Available as a web dashboard, Node/Express backend, and Chrome extension.
 
 ---
 
@@ -57,7 +57,7 @@ AI hallucinates. TrustGuard catches it. Available as a web dashboard, FastAPI ba
 |---|---|
 | **Web Dashboard** | Paste any text → click Verify → get full trust report |
 | **Chrome Extension** | Highlight text on any webpage → right-click → "Verify with TrustGuard AI" |
-| **FastAPI Backend** | REST API for programmatic access and integrations |
+| **Express Backend** | REST API for programmatic access and integrations |
 
 ---
 
@@ -78,7 +78,7 @@ AI hallucinates. TrustGuard catches it. Available as a web dashboard, FastAPI ba
 graph TD
     User([User])
     FE[Web Dashboard / Chrome Extension]
-    API[FastAPI Backend]
+    API[Express Backend]
     Router{LLM Router}
     Gemini[Gemini Flash]
     Groq[Groq · Llama 3.3-70B]
@@ -108,7 +108,7 @@ graph TD
 | Layer | Technology |
 |---|---|
 | Frontend | React, TypeScript, Vite, Tailwind CSS, shadcn/ui |
-| Backend | FastAPI, Python 3.9+, Uvicorn, Pydantic |
+| Backend | Node.js, Express, Multer, node-fetch |
 | AI Models | Gemini 1.5 Flash, Groq Llama 3.3-70B, Claude Sonnet, Mistral via OpenRouter |
 | Search | Tavily AI (primary), DuckDuckGo (fallback) |
 | Extension | Chrome Manifest V3 |
@@ -120,17 +120,10 @@ graph TD
 ```
 trustguard-ai/
 ├── backend/
-│   ├── main.py                   # FastAPI entry point
-│   ├── routers/
-│   │   └── verify.py             # /verify endpoint
-│   ├── services/
-│   │   ├── llm_router.py         # Multi-LLM routing + key rotation
-│   │   ├── claim_extractor.py    # Gemini claim extraction
-│   │   ├── fact_checker.py       # Search + verification logic
-│   │   └── search.py             # Tavily + DuckDuckGo fallback
-│   ├── models/
-│   │   └── schemas.py            # Pydantic request/response models
-│   ├── requirements.txt
+│   ├── server.js                 # Express API entry point
+│   ├── extract.js                # URL / PDF text extraction helpers
+│   ├── test.js                   # Local API smoke tests
+│   ├── package.json
 │   └── .env                      # API keys — never commit
 ├── frontend/
 │   ├── src/
@@ -153,7 +146,7 @@ trustguard-ai/
 
 ## Getting Started
 
-**Prerequisites:** Node.js 18+, Python 3.9+, at least one LLM API key
+**Prerequisites:** Node.js 18+, at least one LLM API key
 
 ### 1. Clone the repository
 
@@ -166,7 +159,7 @@ cd trustguard-ai
 
 ```bash
 cd backend
-pip install -r requirements.txt
+npm install
 ```
 
 Create `backend/.env`:
@@ -180,7 +173,7 @@ TAVILY_API_KEY=your_tavily_api_key
 ```
 
 ```bash
-uvicorn main:app --reload --port 8000
+npm start
 ```
 
 ### 3. Frontend setup
@@ -193,14 +186,15 @@ npm install
 Create `frontend/.env`:
 
 ```env
-VITE_API_URL=http://localhost:8000
+# Optional: point directly at the backend. If omitted, the frontend uses /api/*
+VITE_API_URL=http://localhost:3001
 ```
 
 ```bash
 npm run dev
 ```
 
-Open `http://localhost:5173`.
+Open `http://localhost:8080`.
 
 ### 4. Chrome extension setup
 
@@ -219,12 +213,22 @@ Open `http://localhost:5173`.
 
 **Chrome Extension** — highlight any text on any webpage, right-click, select **"Verify with TrustGuard AI"**, and a floating panel displays results inline.
 
+### Test Samples
+
+Paste any of these into the dashboard to quickly test different verification paths:
+
+1. `The Eiffel Tower was completed in 1889 and is located in Paris.`
+2. `The Moon is made of cheese and humans can breathe there without oxygen.`
+3. `Water boils at 100 degrees Celsius at sea level, and gold is a liquid at room temperature.`
+4. `According to a 2023 Nature study, global temperatures increased by 3.5 C since 1900.`
+5. `Python was created by Guido van Rossum and first released in 1991.`
+
 **Direct API**
 
 ```bash
-curl -X POST http://localhost:8000/verify \
+curl -X POST http://localhost:3001/api/verify \
   -H "Content-Type: application/json" \
-  -d '{"text": "The Eiffel Tower was built in 1887 and stands 450 meters tall."}'
+  -d '{"aiText": "The Eiffel Tower was built in 1887 and stands 450 meters tall.", "model": "auto"}'
 ```
 
 ---

@@ -1,8 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const pdf = require("pdf-parse");
+import { PDFParse } from "pdf-parse";
 
 
 
@@ -47,11 +45,16 @@ export async function extractFromUrl(url) {
  * @returns {Promise<string>}
  */
 export async function extractFromPdf(buffer) {
+  const parser = new PDFParse({ data: buffer });
+
   try {
-    const data = await pdf(buffer);
-    return data.text.trim().substring(0, 20000); // Limit to 20k chars
+    const data = await parser.getText();
+
+    return (data.text || "").trim().substring(0, 20000); // Limit to 20k chars
   } catch (error) {
     console.error("PDF Extraction Error:", error.message);
     throw new Error(`Failed to extract content from PDF: ${error.message}`);
+  } finally {
+    await parser.destroy();
   }
 }

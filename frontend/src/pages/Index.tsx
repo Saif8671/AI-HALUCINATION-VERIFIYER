@@ -12,9 +12,7 @@ const Index = () => {
     isAnalyzing, 
     overallScore, 
     hasResults, 
-    analyzeText,
-    extractUrl,
-    extractPdf 
+    analyzeText
   } = useVerification();
 
   return (
@@ -57,9 +55,7 @@ const Index = () => {
                 <div className="glass rounded-[2.5rem] p-4 sm:p-10 border-white/5 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)]">
                   <TextAnalyzer 
                     onAnalyze={analyzeText} 
-                    isAnalyzing={isAnalyzing} 
-                    onExtractUrl={extractUrl}
-                    onExtractPdf={extractPdf}
+                    isAnalyzing={isAnalyzing}
                   />
                 </div>
               </div>
